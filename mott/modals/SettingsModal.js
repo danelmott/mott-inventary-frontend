@@ -3,7 +3,7 @@ import Modal from '@mott/modals/Modal';
 import useSettingsModal from '@mott/services/modals/useSettingsModal';
 import PasswordField from '@mott/ui/PasswordField';
 import FormError from '@mott/ui/FormError';
-import ProfileGradient from '@mott/ui/ProfileGradient';
+import SkyGradient from '@mott/layout/SkyGradient';
 import Icon from '@mott/ui/Icon';
 import Text from '@mott/ui/Text';
 import Button from '@mott/ui/Button';
@@ -88,8 +88,27 @@ export default function SettingsModal({ open, onClose, triggerRef }) {
                 <div className="flex min-h-0 min-w-0 flex-1 items-center justify-center md:p-card">
                     <div ref={bodyRef} className="flex h-full w-full items-center justify-center">
                         {activeSection === 'account' && (
-                            <div className="h-full w-full">
-                                <ProfileGradient name={user?.name} email={email} verified={isVerified} />
+                            // la tarjeta de la cuenta: el cielo del tema detrás y los datos encima
+                            <div className="relative isolate h-full w-full overflow-hidden rounded-[30px]">
+                                <SkyGradient position="container" />
+                                {/* los datos abajo a la izquierda: la etiqueta pequeña y el valor grande, sin censurar */}
+                                <div className="flex h-full flex-col justify-end gap-card p-card md:p-page">
+                                    {[['Nombre', user?.name], ['Email', email]].map(([label, value]) => (
+                                        <div key={label} className="flex min-w-0 flex-col gap-group">
+                                            <span className="type-body-md text-text">{label}</span>
+                                            <span className="truncate type-headline-md text-text md:type-headline-lg">{value || '—'}</span>
+                                        </div>
+                                    ))}
+                                    {isVerified && (
+                                        <span
+                                            className="mott-glass-edge flex h-10 w-fit items-center gap-group rounded-full px-block type-label-lg text-text"
+                                            style={{ backgroundColor: 'var(--glass-tint)' }}
+                                        >
+                                            <Icon name="verified" size="sm" />
+                                            Correo verificado
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         )}
                         

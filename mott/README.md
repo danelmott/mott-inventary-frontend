@@ -10,8 +10,8 @@ import { cn } from '@mott/utils/cn';
 ```
 
 ```
-ui/          Button, Icon, GoogleIcon, Avatar, Text, Input, Select, ChipSelect, ComposerField, Loading, DragScroll, ProfileGradient, SwatchGrid, ModeButtons, PasswordField, FormError, Toast
-layout/      Navbar, PrettyBackground
+ui/          Button, Icon, GoogleIcon, Avatar, Text, Input, Select, ChipSelect, ComposerField, Loading, DragScroll, SwatchGrid, ModeButtons, PasswordField, FormError, Toast
+layout/      Navbar, SkyGradient
 modals/      Modal (base), FullscreenModal, ThemeModal, OptionsModal, SettingsModal, LogoutModal, OnboardingModal
   auth/      AuthModal
 services/    la lógica (hooks) de los componentes y de las modales grandes

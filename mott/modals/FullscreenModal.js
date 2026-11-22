@@ -2,9 +2,9 @@
 import { cn } from '@mott/utils/cn';
 import Modal from '@mott/modals/Modal';
 import { fullscreenAnimation } from '@mott/animations/modalAnimation';
-import PrettyBackground from '@mott/layout/PrettyBackground';
+import SkyGradient from '@mott/layout/SkyGradient';
 
-// Modal que ocupa toda la vista, con el fondo animado de manchas detrás del contenido. `background`: false lo quita.
+// Modal que ocupa toda la vista, con el cielo animado (SkyGradient) detrás del contenido. `background`: false lo quita.
 export default function FullscreenModal({
     open,
     onClose,
@@ -27,7 +27,7 @@ export default function FullscreenModal({
             swipeToClose={swipeToClose}
             className={cn('mott-fullscreen-panel', className)}
         >
-            {background && <PrettyBackground position="container" />}
+            {background && <SkyGradient position="container" />}
             <div className={cn('relative mx-auto flex h-full w-full max-w-[480px] flex-col', contentClassName)}>{children}</div>
         </Modal>
     );

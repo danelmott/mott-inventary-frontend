@@ -181,17 +181,43 @@
     --z-floating: 50;
     --toast-width: 24rem;
 
-    /* acento de las manchas de PrettyBackground: en claro necesita más */
-    --ball-tint: 58%;
+    /* Liquid Glass (mott-glass, mott-glass-edge), traído de Lenda: el material aclara lo de atrás; en claro, desde un blanco más sólido */
+    --glass-fill: rgb(255 255 255 / 0.62);
+    --glass-rim-hot: rgb(255 255 255 / 0.95);
+    --glass-rim-cold: rgb(255 255 255 / 0.3);
+    --glass-bevel-top: rgb(255 255 255 / 0.9);
+    --glass-bevel-bottom: rgb(0 0 0 / 0.05);
+    --glass-tint: rgb(255 255 255 / 0.6);
+    --glass-bright: 0.98;
+    --glass-lift: 0 24px 60px -16px rgb(0 0 0 / 0.28);
+
+    /* el velo de SkyGradient: en claro el cielo se ve casi entero; en oscuro se apaga para que el texto claro se lea */
+    --sky-veil: 0.1;
 }
 
 [data-theme="dark"] {
-    --ball-tint: 40%;
+    --glass-fill: rgb(255 255 255 / 0.1);
+    --glass-rim-hot: rgb(255 255 255 / 0.75);
+    --glass-rim-cold: rgb(255 255 255 / 0.06);
+    --glass-bevel-top: rgb(255 255 255 / 0.3);
+    --glass-bevel-bottom: rgb(255 255 255 / 0.07);
+    --glass-tint: rgb(255 255 255 / 0.14);
+    --glass-bright: 1.06;
+    --glass-lift: 0 28px 70px -18px rgb(0 0 0 / 0.65);
+    --sky-veil: 0.7;
 }
 
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --ball-tint: 40%;
+        --glass-fill: rgb(255 255 255 / 0.1);
+        --glass-rim-hot: rgb(255 255 255 / 0.75);
+        --glass-rim-cold: rgb(255 255 255 / 0.06);
+        --glass-bevel-top: rgb(255 255 255 / 0.3);
+        --glass-bevel-bottom: rgb(255 255 255 / 0.07);
+        --glass-tint: rgb(255 255 255 / 0.14);
+        --glass-bright: 1.06;
+        --glass-lift: 0 28px 70px -18px rgb(0 0 0 / 0.65);
+        --sky-veil: 0.7;
     }
 }
 
@@ -699,102 +725,6 @@ body {
     }
 }
 
-/* PrettyBackground. La caída va en el degradado y no en mask-image: así solo se compone el transform. */
-@utility mott-ball {
-    position: absolute;
-    aspect-ratio: 1;
-    width: var(--ball-size);
-    opacity: var(--ball-opacity);
-    will-change: transform;
-    --ball-color: color-mix(in srgb, var(--ball-tone) var(--ball-tint), var(--color-surface));
-    background-image: radial-gradient(
-        closest-side,
-        color-mix(in srgb, var(--ball-color) 100%, transparent) 0%,
-        color-mix(in srgb, var(--ball-color) 97.55%, transparent) 10%,
-        color-mix(in srgb, var(--ball-color) 90.45%, transparent) 20%,
-        color-mix(in srgb, var(--ball-color) 79.39%, transparent) 30%,
-        color-mix(in srgb, var(--ball-color) 65.45%, transparent) 40%,
-        color-mix(in srgb, var(--ball-color) 50.0%, transparent) 50%,
-        color-mix(in srgb, var(--ball-color) 34.55%, transparent) 60%,
-        color-mix(in srgb, var(--ball-color) 20.61%, transparent) 70%,
-        color-mix(in srgb, var(--ball-color) 9.55%, transparent) 80%,
-        color-mix(in srgb, var(--ball-color) 2.45%, transparent) 90%,
-        color-mix(in srgb, var(--ball-color) 0%, transparent) 100%
-    );
-}
-
-/* Dos recorridos con periodos sin múltiplo común: el movimiento no se repite a la vista. */
-@utility mott-orbit {
-    position: absolute;
-    inset: 0;
-    will-change: transform;
-}
-
-@utility mott-orbit-1 {
-    animation: drift-1 var(--ball-drift-1) ease-in-out infinite;
-}
-
-@utility mott-orbit-2 {
-    animation: drift-2 var(--ball-drift-2) ease-in-out infinite;
-}
-
-@utility mott-ball-1 {
-    top: -22%;
-    left: -20%;
-    --ball-tone: var(--ball-1);
-    animation: route-1 var(--ball-dur-1) ease-in-out infinite;
-}
-
-@utility mott-ball-2 {
-    top: 2%;
-    left: 28%;
-    --ball-tone: var(--ball-2);
-    animation: route-2 var(--ball-dur-2) ease-in-out infinite;
-}
-
-/* Sin mix-blend-mode: repintaba toda la vista en cada frame. */
-@utility mott-grain {
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-@keyframes route-1 {
-  0%   { transform: translate(0, 0) scale(1); }
-  17%  { transform: translate(42%, -20%) scale(1.06); }
-  33%  { transform: translate(64%, 28%) scale(0.92); }
-  50%  { transform: translate(20%, -10%) scale(1.1); }
-  67%  { transform: translate(52%, 42%) scale(0.96); }
-  84%  { transform: translate(6%, 14%) scale(1.04); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-
-@keyframes route-2 {
-  0%   { transform: translate(0, 0) scale(1); }
-  16%  { transform: translate(-48%, 26%) scale(1.05); }
-  34%  { transform: translate(-18%, -26%) scale(0.91); }
-  51%  { transform: translate(-64%, 32%) scale(1.11); }
-  68%  { transform: translate(-30%, -14%) scale(0.96); }
-  85%  { transform: translate(-8%, 18%) scale(1.03); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-
-@keyframes drift-1 {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(15%, -15%); }
-  50%  { transform: translate(-12%, 11%); }
-  75%  { transform: translate(6%, 17%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-2 {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-17%, 11%); }
-  50%  { transform: translate(11%, -17%); }
-  75%  { transform: translate(-6%, -9%); }
-  100% { transform: translate(0, 0); }
-}
-
 /* lo crea mott/services/useToastBehavior.jsx con el primer toast */
 [data-mott-toast-stack] {
     position: fixed;
@@ -829,4 +759,107 @@ body {
         transition-duration: 1ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+/* ---------- Del proyecto: Liquid Glass y el chat del asistente (traídos de Lenda) ---------- */
+
+@utility mott-glass {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--glass-fill);
+    -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(var(--glass-bright));
+    backdrop-filter: blur(30px) saturate(180%) brightness(var(--glass-bright));
+    box-shadow: var(--glass-lift);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        padding: 1px;
+        border-radius: inherit;
+        background: linear-gradient(150deg, var(--glass-rim-hot) 0%, var(--glass-rim-cold) 36%, var(--glass-rim-cold) 64%, var(--glass-rim-hot) 100%);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        border-radius: inherit;
+        box-shadow: inset 0 1px 1px var(--glass-bevel-top), inset 0 -1px 1px var(--glass-bevel-bottom);
+        pointer-events: none;
+    }
+
+    /* sin backdrop-filter o con la transparencia apagada en el sistema: sustrato opaco, o no se lee */
+    @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+        background-color: var(--color-surface-high);
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background-color: var(--color-surface-high);
+    }
+}
+
+@utility mott-glass-edge {
+    box-shadow:
+        inset 0 0 0 1px var(--glass-rim-cold),
+        inset 0 1px 1px var(--glass-bevel-top),
+        inset 0 -1px 1px var(--glass-bevel-bottom);
+}
+
+/* Mensaje del chat del asistente: lo del usuario, en burbuja sólida; lo de la IA, texto suelto sin contenedor. */
+@utility mott-chat-bubble {
+    @apply type-body-lg whitespace-pre-wrap break-words;
+
+    &[data-author='user'] {
+        @apply rounded-[28px] bg-inverse/85 px-[22px] py-[14px] text-on-inverse;
+    }
+
+    &:not([data-author='user']) {
+        @apply px-tight py-group text-text;
+    }
+
+    /* la respuesta de la IA mientras llega termina en un cursor que parpadea */
+    &[data-streaming]::after {
+        content: '';
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        background-color: currentColor;
+        animation: mott-chat-caret 1s steps(1) infinite;
+
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
+        }
+    }
+}
+
+@keyframes mott-chat-caret {
+    50% { opacity: 0; }
+}
+
+/* Filas que scrollean de lado sin barra (los filtros de productos). */
+.mott-no-scrollbar {
+    scrollbar-width: none;
+}
+
+.mott-no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Modal de contenido (un formulario, un detalle): pantalla completa en el teléfono; desde `md`, panel centrado. El ancho de
+   escritorio lo pone cada modal (`md:w-[…]`) y su contenido scrollea por dentro. */
+@utility mott-sheet-panel {
+    @apply m-0 h-dvh w-full max-w-none overflow-hidden rounded-none p-0;
+    @apply md:m-auto md:h-auto md:max-w-[92vw] md:rounded-[32px];
 }

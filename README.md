@@ -37,10 +37,8 @@ En `.env` van las cuatro variables que conectan las pantallas ya hechas (login, 
   Si usas Google, `GET /api/me` debe traer `has_password` (`false` en las cuentas sin contraseña): así Configuración
   oculta "Cambiar contraseña".
 
-- **http://localhost:3000**: la página de inicio (`app/page.js`), casi vacía. Es la primera que se reemplaza.
-- **http://localhost:3000/docs**: la documentación de cada componente, con un ejemplo en vivo, el código
-  para usarlo y sus props. **Solo existe en desarrollo**: las rutas `*.dev.js` no entran en `next build`
-  (ver `pageExtensions` en [`next.config.mjs`](./next.config.mjs)), así que no llega a producción.
+- **http://localhost:3000**: redirige a `/app/home` (el `redirects` de [`next.config.mjs`](./next.config.mjs)).
+- **/app/home**, **/app/products**, **/app/calendar**: las secciones de la app, con el Navbar de `app/app/layout.js`.
 
 Ya viene cableado en [`app/layout.js`](./app/layout.js): `globals.css`, la fuente DM Sans con
 `next/font`, el script del tema en el `<head>` y `ThemeProvider` + `ToastProvider` + `AuthProvider` (en
@@ -89,11 +87,9 @@ componentes, hooks y utilidades van en `components/`, `hooks/` y `lib/`; los de 
 app/                     rutas de Next (solo routing)
   layout.js              layout raíz: globals.css, DM Sans, script del tema, providers
   providers.js           ThemeProvider + ToastProvider + AuthProvider (agrega aquí tus providers)
-  page.js                la página de inicio (reemplázala)
-  app/home/page.jsx      /app/home, el NEXT_PUBLIC_REDIRECT_PATH por defecto (reemplázala)
+  app/                   la app (/app/*): layout.js con el Navbar, home/ (el NEXT_PUBLIC_REDIRECT_PATH), products/, calendar/
   password-reset/, email/verify/   destinos de los enlaces del correo (abren AuthModal)
   globals.css            tokens de diseño
-  docs/                  la documentación (solo en `npm run dev`)
 
 components/              TUS componentes          → @/components/...
 hooks/                   TUS hooks                → @/hooks/...
@@ -101,11 +97,11 @@ lib/                     TU código suelto (API, constantes, formateadores) → 
 contexts/                providers globales: ThemeContext, ToastContext, authContext (y los tuyos) → @/contexts/...
 
 mott/                    el sistema de diseño     → @mott/...
-  ui/                    Button, Icon, GoogleIcon, Avatar, Text, Input, Select, ChipSelect, ComposerField, Loading, DragScroll, ProfileGradient, SwatchGrid, ModeButtons, PasswordField, FormError, Toast
-  layout/                Navbar, PrettyBackground
+  ui/                    Button, Icon, GoogleIcon, Avatar, Text, Input, Select, ChipSelect, ComposerField, Loading, DragScroll, SwatchGrid, ModeButtons, PasswordField, FormError, Toast
+  layout/                Navbar, SkyGradient
   modals/                Modal (base), FullscreenModal, ThemeModal, OptionsModal, SettingsModal, LogoutModal, OnboardingModal
     auth/                AuthModal
-  services/              la lógica (hooks) de Loading, DragScroll, ProfileGradient, Toast, Navbar, Select y Modal
+  services/              la lógica (hooks) de Loading, DragScroll, Toast, Navbar, Select y Modal
     modals/              la de SettingsModal, AuthModal y OnboardingModal
   theme/                 palette.js (M3), roles.js (colores por intención), themeScript.js (el tema antes del primer pintado); el ThemeProvider está en contexts/ThemeContext.jsx
   animations/            motion.js, modalAnimation.js, scrim.js, curtain.js, LoadingFlash…
@@ -131,8 +127,6 @@ un paquete: si un componente no hace lo que necesitas, edítalo en `mott/`.
 ---
 
 ## Dónde crear cada cosa
-
-Con `npm run dev`, la misma tabla está en http://localhost:3000/docs/estructura.
 
 | Quiero crear… | Va en | Se importa / se usa |
 |---|---|---|
@@ -205,15 +199,14 @@ y separaciones crecen solos con la pantalla:
 Los colores por defecto de Tailwind están desactivados: `bg-red-500` no existe. El bloque de colores lo
 escribe `npm run theme` desde la semilla por defecto (entre los marcadores `generated`); no lo edites a mano.
 
-Todo esto, con ejemplos, está en `/docs` → Fundamentos (Responsive tiene breakpoints, rejillas y container queries).
 
 ---
 
 ## Scripts
 
 ```bash
-npm run dev     # next dev (con /docs)
-npm run build   # next build (sin /docs)
+npm run dev     # next dev
+npm run build   # next build
 npm run start   # sirve el build de producción
 npm run lint    # eslint
 npm run theme   # regenera el bloque de colores de app/globals.css desde la semilla por defecto
